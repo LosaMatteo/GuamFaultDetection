@@ -64,4 +64,5 @@ Ancora nello script `Build_Model.m`, si procede con l'addestramento di un classi
 ## Step 8: Test Modello
 Infine, sempre nel file `Build_Model.m`, si effettua il test del modello sulla porzione selezionata nello Step 6. Dopo le predizioni, verranno mostrate *Matrice di Confusione*, *ROC Curve* e *accuracy* generale.
 
+## Nota
 I procedimenti degli *step 6-7-8* sono stati ripetuti per la costruzione di tutti e tre i modelli previsti dall'approccio a cascata utilizzato.
