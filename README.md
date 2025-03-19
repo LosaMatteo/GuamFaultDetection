@@ -6,7 +6,7 @@ L'obiettivo del progetto è quello di costruire un modello di classificazione di
 ## Panoramica del Progetto
 Il progetto utilizza un simulatore MATLAB/SIMULINK, originariamente sviluppato nel repository [Generic-Urban-Air-Mobility](https://github.com/nasa/Generic-Urban-Air-Mobility-GUAM), per generare scenari realistici di volo sotto diverse condizioni di guasto che possono interessare diverse superfici di controllo del velivolo. La classificazione finale consiste nell'utilizzo di *tre modelli* con *approccio a cascata*:
 1. **Primo Modello**: classificherà il record tra scenario con guasto o senza guasto, indipendentemente dalla tipologia.
-2. **Secondo Modello**: se il modello precedente ha predetto un guasto, il secondo dovrà predire quale superfice di controllo è stata interessata.
+2. **Secondo Modello**: se il modello precedente ha predetto un guasto, il secondo dovrà predire quale superficie di controllo è stata interessata.
 3. **Terzo Modello**: l'ultimo modello si occuperà di assegnare una tipologia al guasto che ha colpito il velivolo.
 
 La pipeline del progetto prevede i seguenti step principali:
@@ -33,7 +33,7 @@ Altre funzionalità necessarie:
 - All'interno della directory principale...FINIRE
 
 ## Step 1: Generazione Traiettorie e Guasti
-Nel nostro esperimento sono stati considerati guasti di diversa categoria alla superfice 5, il *timone*, e alla superfice 1, posizionata nell'*ala sinistra* del velivolo. Lo script `Generate_Own_Traj.m` è stato utilizzato per generare un insieme randomico di 3000 traiettorie diverse. Per ognuna delle traiettorie, tramite lo script `Generate_Failures.m`, viene generato un guasto di una certa categoria, durata e intensità, alla superfice 1 e, ripetendo il procedimento, alla superfice 5. I file di output dei due script, `Data_Set_1.mat` e `Data_Set_4.mat`, contengono rispettivamente le informazioni sulle traiettorie e sui guasti generati.
+Nel nostro esperimento sono stati considerati guasti di diversa categoria alla superficie 5, il *timone*, e alla superficie 1, posizionata nell'*ala sinistra* del velivolo. Lo script `Generate_Own_Traj.m` è stato utilizzato per generare un insieme randomico di 3000 traiettorie diverse. Per ognuna delle traiettorie, tramite lo script `Generate_Failures.m`, viene generato un guasto di una certa categoria, durata e intensità, alla superficie 1 e, ripetendo il procedimento, alla superficie 5. I file di output dei due script, `Data_Set_1.mat` e `Data_Set_4.mat`, contengono rispettivamente le informazioni sulle traiettorie e sui guasti generati.
 
 Le tipologie di guasto disponibili sono le seguenti:
 
@@ -50,7 +50,7 @@ Lo script `Simula_Voli.m`, utilizzando i file ottenuti nello step precedente, pe
 Sempre nello script `Simula_Voli.m`, verranno raccolti i dati relativi alle variabili di controllo di motori e superfici e ai sensori, aggiungendo a questi ultimi del rumore bianco gaussiano con un rapporto segnale/rumore [dB] variabile tra 10 e 30. Il rumore sarà poi filtrato con un filtro passa-basso, specificando la frequenza di taglio, ottenendo i dati di volo finali. I risultati saranno salvati sotto forma di tabelle, in file `.csv`, nella directory `/data`.
 
 ## Step 4: Creazione Finestre Temporali
-Tramite il file `Crea_Campioni.m` è possibile estrarre randomicamente delle finestre temporali dai singoli voli, a partire dai file `.csv` ottenuti, all'interno dell'intervallo di tempo in cui il guasto si è verificato. L'utente potrà specificare quante finestre temporali per volo estrarre e la loro durata in secondi. La finestra temporale scelta verrà utilizzata per catturare i dati di tutti i segnali di interesse. Lo script procederà poi a etichettare la singola finestra in base alla tipologia di guasto e alla superfice di controllo interessata.
+Tramite il file `Crea_Campioni.m` è possibile estrarre randomicamente delle finestre temporali dai singoli voli, a partire dai file `.csv` ottenuti, all'interno dell'intervallo di tempo in cui il guasto si è verificato. L'utente potrà specificare quante finestre temporali per volo estrarre e la loro durata in secondi. La finestra temporale scelta verrà utilizzata per catturare i dati di tutti i segnali di interesse. Lo script procederà poi a etichettare la singola finestra in base alla tipologia di guasto e alla superficie di controllo interessata.
 
 ## Step 5: Pulizia Dataset
 Dopo aver estratto le feature nel tempo dei segnali per ogni finestra temporale, ottenendo un nuovo dataset (`trainingSetDFD.mat`), è possibile effettuare una pulizia dei valori non validi tramite il file `Clean_Table.m`. Questo script, tramite metodi di imputazione, produce la tabella `trainingSetDFDClean.mat`. 
