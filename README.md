@@ -1,4 +1,4 @@
-# Guam Fault Classification
+# Guam Fault Diagnosis
 Questo repository fornisce una pipeline completa per raccogliere ed elaborare dati di volo al fine di classificare diversi scenari di guasto in un contesto aeronautico per la Urbain Air Mobility.
 
 L'obiettivo del progetto è quello di costruire un modello di classificazione diagnostico in grado di distinguere tra le varie tipologie di guasto che interessano le superfici di controllo del velivolo.
