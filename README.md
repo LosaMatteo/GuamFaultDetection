@@ -75,6 +75,6 @@ Ancora nello script `Costruisci_Modello.m`, si procede con l'addestramento di un
 ## Step 8: Test Modello
 Infine, nel file `Costruisci_Modello.m`, si effettua il test del modello sulla porzione selezionata nello Step 6. Dopo le predizioni, verranno mostrate *Matrice di Confusione*, *ROC Curve* e *accuracy* generale. Nello script `Test_Modelli.m` è presente un esempio di classificazione con l'utilizzo a cascata dei tre modelli. Questo esempio utilizza il set di dati `Models/guamTestsetProvaDFD.mat` come prova.
 
-## Nota
+## Note
 Nel nostro esperimento sono stati accorpati i guasti Pre-Scale e Post-Scale in un unica classe per migliorare la classificazione generale.
 I procedimenti degli *step 5-6-7-8* sono stati ripetuti per la costruzione di tutti e tre i modelli previsti dall'approccio a cascata utilizzato.
