@@ -12,7 +12,7 @@ elseif surf_id == 5
 end
 
 % directory per il salvataggio dei dati (aggiungere \ o / alla fine del percorso)
-output_dir = '...\Generic-Urban-Air-Mobility-GUAM-main\data\';
+output_dir = './data/';
 
 % setup velivolo
 userStruct.variants.refInputType = 4; % ref input: 4 = Piecewise Bezier

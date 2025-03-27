@@ -1,0 +1,5 @@
+seed = 4
+testRatio = 0.15
+kFolds = 5
+anova test
+30 features selected

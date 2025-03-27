@@ -1,0 +1,5 @@
+seed = 2
+testRatio = 0.15
+kFolds = 5
+kruskal-wallis test
+30 features selected
