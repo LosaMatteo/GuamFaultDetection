@@ -1,5 +1,7 @@
 # Guam Fault Detection
-Questo repository fornisce una pipeline completa per raccogliere ed elaborare dati di volo al fine di classificare diversi scenari di guasto in un contesto aeronautico per la Urbain Air Mobility.
+Questo repository nasce dal progetto D1 - GENERIC URBAN AIR MOBILITY del corso di Manutenzione Preventiva per la Robotica e l'Automazione Intelligente, dell'Università Politecnica delle Marche, tenuto dal Prof. Alessandro Freddi.
+
+Il progetto svolto fornisce una pipeline completa per la raccolta e l'elaborazione dei dati di volo con il fine di classificare diversi scenari di guasto in un contesto aeronautico per la Urbain Air Mobility.
 
 L'obiettivo del progetto è quello di costruire un modello di classificazione diagnostico in grado di distinguere tra le varie tipologie di guasto che interessano le superfici di controllo del velivolo.
 
@@ -29,11 +31,20 @@ Altre funzionalità necessarie:
 - **Signal Processing Toolbox**
 
 ## Utilizzo
-- Clonare il repository originale del simulatore [Generic-Urban-Air-Mobility](https://github.com/nasa/Generic-Urban-Air-Mobility-GUAM)
-- All'interno della directory principale...FINIRE
+- Clonare il repository originale del simulatore, [Generic-Urban-Air-Mobility](https://github.com/nasa/Generic-Urban-Air-Mobility-GUAM).
+- Scaricare questo repository.
+- Copiare i file della cartella `Challenge_Problems` di questo repository nell'omonima cartella del repository originale.
+- Copiare i restanti file e cartelle di questo repository nella directory `/Generic-Urban-Air-Mobility-GUAM` di quello originale.
+
+## Struttura del repository
+- **Challenge_Problems**: contiene i dati relativi alle traiettorie e i guasti generati (insieme allo script per generarli).
+- **data**: contiene alcuni file di volo di esempio in formato `.csv` da cui è possibile effettuare delle acquisizione dei segnali.
+- **Dataset**: contiene i dataset ottenuti dalle diverse fasi dell'esperimento: dataset con finestre temporali e dataset con feature nel tempo (**DFD**) per i tre modelli.
+- **Models**: contiene i modelli di classificazione ottenuti con relativi risultati e parametri utilizzati (file `info.txt`).
+- **Script ausiliari**: nella cartella principale, file per simulazione dei voli, creazione delle acquisizioni, del dataset, dei classificatori e test di questi ultimi.
 
 ## Step 1: Generazione Traiettorie e Guasti
-Nel nostro esperimento sono stati considerati guasti di diversa categoria alla superficie 5, il *timone*, e alla superficie 1, posizionata nell'*ala sinistra* del velivolo. Lo script `Generate_Own_Traj.m` è stato utilizzato per generare un insieme randomico di 3000 traiettorie diverse. Per ognuna delle traiettorie, tramite lo script `Generate_Failures.m`, viene generato un guasto di una certa categoria, durata e intensità, alla superficie 1 e, ripetendo il procedimento, alla superficie 5. I file di output dei due script, `Data_Set_1.mat` e `Data_Set_4.mat`, contengono rispettivamente le informazioni sulle traiettorie e sui guasti generati.
+Nel nostro esperimento sono stati considerati guasti di diversa categoria alla superficie 5, il *timone*, e alla superficie 1, posizionata nell'*ala sinistra* del velivolo. Lo script `Generate_Own_Traj.m`, del repository originale, è stato utilizzato per generare un insieme randomico di 3000 traiettorie diverse. Per ognuna delle traiettorie, tramite lo script `Challenge_Problems/Generate_Failures_Modificato.m`, viene generato un guasto di una certa categoria, durata e intensità, alla superficie 1 e, ripetendo il procedimento, alla superficie 5. I file di output dei due script, `Challenge_Problems/Data_Set_1_Test.mat`, `Challenge_Problems/Data_Set_4_s1.mat` e `Challenge_Problems/Data_Set_4_s5.mat`, contengono rispettivamente le informazioni sulle traiettorie e sui guasti generati.
 
 Le tipologie di guasto disponibili sono le seguenti:
 
@@ -50,19 +61,20 @@ Lo script `Simula_Voli.m`, utilizzando i file ottenuti nello step precedente, pe
 Sempre nello script `Simula_Voli.m`, verranno raccolti i dati relativi alle variabili di controllo di motori e superfici e ai sensori, aggiungendo a questi ultimi del rumore bianco gaussiano con un rapporto segnale/rumore [dB] variabile tra 10 e 30. Il rumore sarà poi filtrato con un filtro passa-basso, specificando la frequenza di taglio, ottenendo i dati di volo finali. I risultati saranno salvati sotto forma di tabelle, in file `.csv`, nella directory `/data`.
 
 ## Step 4: Creazione Finestre Temporali
-Tramite il file `Crea_Campioni.m` è possibile estrarre randomicamente delle finestre temporali dai singoli voli, a partire dai file `.csv` ottenuti, all'interno dell'intervallo di tempo in cui il guasto si è verificato. L'utente potrà specificare quante finestre temporali per volo estrarre e la loro durata in secondi. La finestra temporale scelta verrà utilizzata per catturare i dati di tutti i segnali di interesse. Lo script procederà poi a etichettare la singola finestra in base alla tipologia di guasto e alla superficie di controllo interessata.
+Tramite il file `Crea_Acquisizioni.m` è possibile estrarre randomicamente delle finestre temporali dai singoli voli, a partire dai file `.csv` ottenuti, all'interno dell'intervallo di tempo in cui il guasto si è verificato. L'utente potrà specificare quante finestre temporali per volo estrarre e la loro durata in secondi. La finestra temporale scelta verrà utilizzata per catturare i dati di tutti i segnali di interesse. Lo script procederà poi a etichettare la singola finestra in base alla tipologia di guasto e alla superficie di controllo interessata. **Nota**: per limiti di dimensione non è stato possibile caricare il dataset completo come file singolo; questo è stato diviso in tre tabelle (`guamDataset_NoFault.mat`, `guamDataset_Surf1.mat` e `guamDataset_Surf5.mat`, nella cartella `Dataset`) che possono essere unite per proseguire con i passaggi successivi.
 
 ## Step 5: Pulizia Dataset
-Dopo aver estratto le feature nel tempo dei segnali per ogni finestra temporale, ottenendo un nuovo dataset (`trainingSetDFD.mat`), è possibile effettuare una pulizia dei valori non validi tramite il file `Clean_Table.m`. Questo script, tramite metodi di imputazione, produce la tabella `trainingSetDFDClean.mat`. 
+Dopo aver estratto le feature nel tempo dei segnali per ogni finestra temporale si ottiene nuovo dataset (`Dataset/guamDatasetDFD.mat`, nel nostro caso), a partire dal quale vengono creati i tre diversi dataset per i modelli che verranno addestrati tramite lo script `Crea_Dataset.m`. Successivamente, viene effettuata una pulizia dei valori non validi con metodi di imputazione, producendo una nuova tabella. Questa funzionalità è presente nello script `Costruisci_Modello.m`.
 
 ## Step 6: Feature Selection
-Nello script `Build_Model.m`, a partire dal dataset ottenuto nello step precedente, avviene la preparazione dei dati per l'addestramento e per il test, dove l'utente può scegliere la percentuale del dataset da riservare per il test. Con i dati rimanenti (quelli non scelti per il test), per ridurre la dimensionalità dei dati, è possibile valutare le feature attraverso i test *One-Way ANOVA* o *Kruskall-Wallis* e scegliere il numero di feature ordinate per punteggio da selezionare.
+Sempre nello script `Costruisci_Modello.m`, a partire dal dataset ottenuto nello step precedente, avviene la preparazione dei dati per l'addestramento e per il test, dove l'utente può scegliere la percentuale del dataset da riservare per il test. Con i dati rimanenti (quelli non scelti per il test), per ridurre la dimensionalità dei dati, è possibile valutare le feature attraverso i test *One-Way ANOVA* o *Kruskall-Wallis* e scegliere il numero di feature ordinate per punteggio da selezionare.
 
 ## Step 7: Costruzione Modello
-Ancora nello script `Build_Model.m`, si procede con l'addestramento di un classificatore di tipo *ensemble* con *alberi decisionali*. La prima fase prevede la ricerca degli iperparametri ottimali per la minimizzazione dell'errore di classificazione, stimato tramite *k-fold cross-validation*. Alla fine del processo, verrà mostrata la matrice di confusione realtiva al modello cross-validato. Gli iperparametri ottimali restituiti vengono poi utilizzati per l'addestramento del modello finale.
+Ancora nello script `Costruisci_Modello.m`, si procede con l'addestramento di un classificatore di tipo *ensemble* con *alberi decisionali*. La prima fase prevede la ricerca degli iperparametri ottimali per la minimizzazione dell'errore di classificazione, stimato tramite *k-fold cross-validation*. Alla fine del processo, verrà mostrata la matrice di confusione realtiva al modello cross-validato. Gli iperparametri ottimali restituiti vengono poi utilizzati per l'addestramento del modello finale.
 
 ## Step 8: Test Modello
-Infine, sempre nel file `Build_Model.m`, si effettua il test del modello sulla porzione selezionata nello Step 6. Dopo le predizioni, verranno mostrate *Matrice di Confusione*, *ROC Curve* e *accuracy* generale.
+Infine, nel file `Costruisci_Modello.m`, si effettua il test del modello sulla porzione selezionata nello Step 6. Dopo le predizioni, verranno mostrate *Matrice di Confusione*, *ROC Curve* e *accuracy* generale. Nello script `Test_Modelli.m` è presente un esempio di classificazione con l'utilizzo a cascata dei tre modelli. Questo esempio utilizza il set di dati `Models/guamTestsetProvaDFD.mat` come prova.
 
 ## Nota
-I procedimenti degli *step 6-7-8* sono stati ripetuti per la costruzione di tutti e tre i modelli previsti dall'approccio a cascata utilizzato.
+Nel nostro esperimento sono stati accorpati i guasti Pre-Scale e Post-Scale in un unica classe per migliorare la classificazione generale.
+I procedimenti degli *step 5-6-7-8* sono stati ripetuti per la costruzione di tutti e tre i modelli previsti dall'approccio a cascata utilizzato.
