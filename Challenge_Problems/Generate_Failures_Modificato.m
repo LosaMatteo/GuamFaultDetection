@@ -107,7 +107,7 @@ defUnits = setUnits('ft','slug');
 % *************************************************************************
 
 % Specify user input parameters
-own_ship_traj_file  = './Data_Set_1.mat'; % Own-ship trajectory file
+own_ship_traj_file  = './Data_Set_1_Test.mat'; % Own-ship trajectory file
 
 % Specify user output parameters
 out_path        = './'; % Desired absolute or relative path for output .mat file
