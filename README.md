@@ -1,7 +1,7 @@
 # Guam Fault Detection
 Questo repository nasce dal progetto D1 - GENERIC URBAN AIR MOBILITY del corso di Manutenzione Preventiva per la Robotica e l'Automazione Intelligente, dell'Università Politecnica delle Marche, tenuto dal Prof. Alessandro Freddi.
 
-Il progetto svolto fornisce una pipeline completa per la raccolta e l'elaborazione dei dati di volo con il fine di classificare diversi scenari di guasto in un contesto aeronautico per la Urbain Air Mobility.
+Il progetto svolto fornisce una pipeline completa per la raccolta e l'elaborazione dei dati di volo con il fine di classificare diversi scenari di guasto in un contesto aeronautico per la Urban Air Mobility.
 
 L'obiettivo del progetto è quello di costruire un modello di classificazione diagnostico in grado di distinguere tra le varie tipologie di guasto che interessano le superfici di controllo del velivolo.
 
@@ -13,7 +13,7 @@ Il progetto utilizza un simulatore MATLAB/SIMULINK, originariamente sviluppato n
 
 La pipeline del progetto prevede i seguenti step principali:
 
-1. **Generazione Traiettorie e Guasti**: generazione di diverse traiettorie di volo e diversi scenari di guasto..
+1. **Generazione Traiettorie e Guasti**: generazione di diverse traiettorie di volo e scenari di guasto..
 2. **Simulazione dei Voli**: simulazioni di volo in condizioni normali e di guasto.
 3. **Raccolta ed Elaborazione dei Dati**: raccolta dei dati di volo con aggiunta e filtraggio di rumore bianco gaussiano, solo sui dati provenienti dai sensori, per simulare scenari di volo più realistici.
 4. **Creazione delle Finestre Temporali**: selezione di una o più finestre temporali per volo, etichettate in base allo scenario di guasto del volo.
@@ -32,13 +32,13 @@ Altre funzionalità necessarie:
 
 ## Utilizzo
 - Clonare il repository originale del simulatore, [Generic-Urban-Air-Mobility](https://github.com/nasa/Generic-Urban-Air-Mobility-GUAM).
-- Scaricare questo repository.
+- Clonare questo repository.
 - Copiare i file della cartella `Challenge_Problems` di questo repository nell'omonima cartella del repository originale.
 - Copiare i restanti file e cartelle di questo repository nella directory `/Generic-Urban-Air-Mobility-GUAM` di quello originale.
 
 ## Struttura del repository
 - **Challenge_Problems**: contiene i dati relativi alle traiettorie e i guasti generati (insieme allo script per generarli).
-- **data**: contiene alcuni file di volo di esempio in formato `.csv` da cui è possibile effettuare delle acquisizione dei segnali.
+- **data**: contiene alcuni file di volo di esempio in formato `.csv` da cui è possibile effettuare un'acquisizione dei segnali.
 - **Dataset**: contiene i dataset ottenuti dalle diverse fasi dell'esperimento: dataset con finestre temporali e dataset con feature nel tempo già calcolate (**DFD**) per i tre modelli.
 - **Models**: contiene i tre modelli di classificazione ottenuti con relativi risultati e parametri utilizzati (file `info.txt`), insieme al test set di prova dell'approccio a cascata.
 - **Script ausiliari**: nella cartella principale sono presenti i file per simulazione dei voli, creazione delle acquisizioni, del dataset, dei classificatori e test di questi ultimi.
@@ -70,11 +70,11 @@ Dopo aver estratto le feature nel tempo dei segnali per ogni finestra temporale 
 Sempre nello script `Costruisci_Modello.m`, a partire dal dataset ottenuto nello step precedente, avviene la preparazione dei dati per l'addestramento e per il test dei classificatori, dove l'utente può scegliere la percentuale del dataset da riservare per il test. Con i dati rimanenti (quelli non scelti per il test), per ridurre la dimensionalità dei dati, è possibile valutare le feature attraverso i test *One-Way ANOVA* o *Kruskall-Wallis* e scegliere il numero di feature ordinate per punteggio da selezionare.
 
 ## Step 7: Costruzione Modello
-Ancora nello script `Costruisci_Modello.m`, si procede con l'addestramento di un classificatore di tipo *ensemble* con *alberi decisionali*. La prima fase prevede la ricerca degli iperparametri ottimali per la minimizzazione dell'errore di classificazione, stimato tramite *k-fold cross-validation*. Alla fine del processo, verrà mostrata la matrice di confusione realtiva al modello cross-validato. Gli iperparametri ottimali restituiti vengono poi utilizzati per l'addestramento del modello finale.
+Ancora nello script `Costruisci_Modello.m`, si procede con l'addestramento di un classificatore di tipo *ensemble* con *alberi decisionali*. La prima fase prevede la ricerca degli iperparametri ottimali per la minimizzazione dell'errore di classificazione, stimato tramite *k-fold cross-validation*. Alla fine del processo, verrà mostrata la matrice di confusione relativa al modello cross-validato. Gli iperparametri ottimali restituiti vengono poi utilizzati per l'addestramento del modello finale.
 
 ## Step 8: Test Modello
 Infine, nel file `Costruisci_Modello.m`, si effettua il test del modello sulla porzione selezionata nello Step 6. Dopo le predizioni, verranno mostrate *Matrice di Confusione*, *ROC Curve* e *accuracy* generale. Nello script `Test_Modelli.m` è presente un esempio di classificazione con l'utilizzo a cascata dei tre modelli. Questo esempio utilizza il set di dati `Models/guamTestsetProvaDFD.mat` come prova.
 
 ## Note
-Nel nostro esperimento sono stati accorpati i guasti Pre-Scale e Post-Scale in un unica classe per migliorare la classificazione generale.
+Nel nostro esperimento sono stati accorpati i guasti Pre-Scale e Post-Scale in un'unica classe per migliorare la classificazione generale.
 I procedimenti degli *step 5-6-7-8* sono stati ripetuti per la costruzione di tutti e tre i modelli previsti dall'approccio a cascata utilizzato.
